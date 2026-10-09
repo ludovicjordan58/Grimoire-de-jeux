@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1A0A04">
+  <meta name="apple-mobile-web-app-title" content="Le Grimoire">
+  <title>Le Grimoire des Jeux</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --leather:#1A0A04;--leather2:#2C1508;
+  --parchment:#F0DFB0;--parchment2:#E8D49A;--parchment3:#DFC880;
+  --ink:#1C0F08;--ink2:#3D2010;
+  --blood:#8B1A1A;--blood2:#6B1010;
+  --gold:#9B7A2E;--gold2:#C9A84C;
+  --worn:#A08060;
+  --shadow:0 4px 24px rgba(0,0,0,.6);
+}
+body{
+  background-color:var(--leather);
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.05) 2px,rgba(0,0,0,.05) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 6px),
+    radial-gradient(ellipse at 20% 30%,rgba(60,20,5,.4) 0%,transparent 60%),
+    radial-gradient(ellipse at 80% 70%,rgba(30,10,2,.5) 0%,transparent 60%);
+  font-family:'IM Fell English',Georgia,serif;
+  min-height:100vh;color:var(--ink);
+}
+#app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 60px}
+.cover{width:100%;max-width:520px;text-align:center;padding:36px 20px 20px;position:relative}
+.cover-rule{height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);margin:10px 0}
+.cover-rule.thin{height:1px;background:linear-gradient(90deg,transparent,var(--worn),transparent)}
+.cover-title{font-family:'Cinzel Decorative',serif;font-weight:900;font-size:clamp(1.4rem,6vw,2rem);color:var(--gold2);letter-spacing:2px;text-shadow:0 2px 8px rgba(0,0,0,.8),0 0 20px rgba(155,122,46,.3);margin:10px 0 4px;line-height:1.2}
+.cover-subtitle{font-family:'Cinzel',serif;font-size:.75rem;color:var(--worn);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.cover-ornament{color:var(--blood);font-size:1.1rem;letter-spacing:8px;opacity:.8}
+.page{background-color:var(--parchment);background-image:linear-gradient(180deg,var(--parchment) 0%,var(--parchment2) 40%,var(--parchment) 100%);border:1px solid var(--worn);border-radius:2px;width:calc(100% - 24px);max-width:520px;box-shadow:var(--shadow),inset 0 0 60px rgba(160,128,96,.15);position:relative;overflow:hidden}
+.page::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blood2),var(--blood),var(--gold),var(--blood),var(--blood2))}
+.page-inner{padding:24px 20px 28px}
+.sec-head{font-family:'Cinzel',serif;font-weight:700;font-size:.75rem;color:var(--blood);letter-spacing:2.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:22px}
+.sec-head:first-child{margin-top:0}
+.sec-head::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--blood),transparent);opacity:.4}
+.sec-head-symbol{color:var(--gold);font-size:.9rem;flex-shrink:0}
+.toc-item{display:flex;align-items:center;gap:0;padding:11px 0;cursor:pointer;border-bottom:1px solid rgba(160,128,96,.3);transition:background .15s;position:relative}
+.toc-item:last-child{border-bottom:none}
+.toc-item:active{background:rgba(155,122,46,.1)}
+.toc-num{font-family:'Cinzel',serif;font-size:.72rem;color:var(--worn);width:26px;flex-shrink:0}
+.toc-name{font-family:'Cinzel',serif;font-weight:600;font-size:.95rem;color:var(--ink);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toc-dots{flex:1;height:1px;background-image:repeating-linear-gradient(90deg,var(--worn) 0,var(--worn) 2px,transparent 2px,transparent 7px);opacity:.35;margin:0 8px;min-width:20px}
+.toc-players{font-family:'Cinzel',serif;font-size:.7rem;color:var(--blood);flex-shrink:0}
+.toc-arrow{font-size:.8rem;color:var(--gold);flex-shrink:0;margin-left:8px;opacity:.7}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 18px;border-radius:1px;border:none;font-family:'Cinzel',serif;font-size:.78rem;font-weight:600;letter-spacing:1px;cursor:pointer;transition:all .15s;text-transform:uppercase}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--blood2),var(--blood));color:var(--parchment);border:1px solid var(--blood);box-shadow:0 2px 8px rgba(139,26,26,.4),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-primary:active{background:linear-gradient(135deg,var(--blood),#A02020)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--ink);border:1px solid var(--gold2);box-shadow:0 2px 8px rgba(155,122,46,.4)}
+.btn-ghost{background:transparent;color:var(--worn);border:1px solid rgba(160,128,96,.4)}
+.btn-ghost:active{background:rgba(160,128,96,.1)}
+.btn-danger{background:transparent;color:var(--blood);border:1px solid rgba(139,26,26,.3);font-size:.72rem}
+.btn-danger:active{background:rgba(139,26,26,.08)}
+.btn-full{width:100%}
+.field{margin-bottom:16px}
+.field label{font-family:'Cinzel',serif;font-size:.7rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--blood);display:block;margin-bottom:5px}
+.field input,.field textarea{width:100%;background:rgba(224,200,128,.15);border:1px solid rgba(160,128,96,.5);border-bottom:2px solid rgba(160,128,96,.6);border-radius:1px;padding:10px 12px;font-family:'IM Fell English',Georgia,serif;font-size:1rem;color:var(--ink);outline:none;transition:border .2s,background .2s;-webkit-appearance:none;appearance:none}
+.field input:focus,.field textarea:focus{background:rgba(224,200,128,.25);border-color:var(--gold);border-bottom-color:var(--gold2)}
+.field textarea{resize:none;min-height:130px;line-height:1.7}
+.field-row{display:flex;gap:12px}
+.field-row .field{flex:1}
+.game-title-display{font-family:'Cinzel Decorative',serif;font-weight:700;font-size:clamp(1.1rem,4vw,1.5rem);color:var(--blood);text-align:center;margin-bottom:4px;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.15)}
+.game-players-display{text-align:center;font-family:'Cinzel',serif;font-size:.75rem;color:var(--worn);letter-spacing:2px;margin-bottom:8px}
+.content-block{font-size:.97rem;line-height:1.85;color:var(--ink2);white-space:pre-wrap;font-style:italic}
+.content-block-plain{font-size:.97rem;line-height:1.85;color:var(--ink2);white-space:pre-wrap}
+.empty-field{font-style:italic;color:var(--worn);font-size:.9rem}
+.ornament{text-align:center;color:var(--gold);font-size:.9rem;letter-spacing:6px;margin:16px 0 6px;opacity:.7}
+.hr-ornament{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--gold);font-size:.8rem;opacity:.5}
+.hr-ornament::before,.hr-ornament::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--worn),transparent)}
+.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+.action-row{display:flex;gap:10px;margin-top:22px}
+.action-row .btn{flex:1}
+.empty-tome{text-align:center;padding:32px 16px}
+.empty-tome-glyph{font-size:2.8rem;margin-bottom:12px;filter:sepia(1) brightness(.6)}
+.empty-tome-text{font-family:'Cinzel',serif;font-size:.82rem;color:var(--worn);line-height:1.8;letter-spacing:.5px}
+#confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px}
+.confirm-box{background-color:var(--parchment);background-image:linear-gradient(180deg,var(--parchment) 0%,var(--parchment2) 100%);border:1px solid var(--worn);border-radius:2px;padding:28px 24px;max-width:360px;width:100%;box-shadow:var(--shadow);text-align:center}
+.confirm-title{font-family:'Cinzel',serif;font-weight:700;font-size:1rem;color:var(--blood);margin-bottom:10px;letter-spacing:1px}
+.confirm-text{font-size:.92rem;color:var(--ink2);line-height:1.7;margin-bottom:22px;font-style:italic}
+.confirm-btns{display:flex;gap:10px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--leather2);border:1px solid var(--gold);color:var(--parchment);padding:9px 18px;font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:1px;z-index:200;white-space:nowrap;display:none;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.fade-in{animation:fi .28s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<div id="confirm-overlay" style="display:none"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STORAGE
+// ═══════════════════════════════════════════════════════════
+const KEY='grimoire_games_v1';
+function loadGames(){try{const d=localStorage.getItem(KEY);return d?JSON.parse(d):[]}catch{return[]}}
+function saveGames(g){try{localStorage.setItem(KEY,JSON.stringify(g))}catch(e){console.error(e)}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const S={view:'list',games:[],selectedId:null,installPrompt:null,showInstall:false};
+function set(u){Object.assign(S,u);render()}
+
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+let _tt;
+function showToast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(_tt);_tt=setTimeout(()=>el.style.display='none',2400)}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════════════════
+function render(){
+  document.getElementById('app').innerHTML=`
+    <div class="cover">
+      <div class="cover-rule"></div>
+      <div class="cover-title">Le Grimoire des Jeux</div>
+      <div class="cover-subtitle">Tome des règles & compagnons de jeu</div>
+      <div class="cover-ornament">⚔ ✦ ⚔</div>
+      <div class="cover-rule thin"></div>
+    </div>
+    ${renderView()}
+  `;
+}
+
+function renderView(){
+  if(S.view==='list')   return renderList();
+  if(S.view==='view')   return renderGameView();
+  if(S.view==='new')    return renderForm(true);
+  if(S.view==='edit')   return renderForm(false);
+  return '';
+}
+
+// ── List ──────────────────────────────────────────────────
+function renderList(){
+  return`<div class="page fade-in"><div class="page-inner">
+    <div class="sec-head"><span class="sec-head-symbol">📜</span>Table des Matières</div>
+    ${S.games.length===0
+      ?`<div class="empty-tome"><div class="empty-tome-glyph">📖</div><div class="empty-tome-text">Ce grimoire est encore vierge.<br>Inscrivez votre premier jeu<br>pour commencer la collection.</div></div>`
+      :`<div style="margin-bottom:16px">${S.games.map((g,i)=>`
+        <div class="toc-item" onclick="openGame('${g.id}')">
+          <div class="toc-num">${String(i+1).padStart(2,'0')}</div>
+          <div class="toc-name">${esc(g.name)}</div>
+          <div class="toc-dots"></div>
+          <div class="toc-players">${g.minPlayers||'?'}${g.maxPlayers&&g.maxPlayers!==g.minPlayers?'–'+g.maxPlayers:''} ⚔</div>
+          <div class="toc-arrow">›</div>
+        </div>`).join('')}</div>`}
+    <div class="hr-ornament">✦</div>
+    <button class="btn btn-primary btn-full" onclick="set({view:'new'})">✦ Inscrire un nouveau jeu</button>
+  </div></div>`;
+}
+
+// ── View game ─────────────────────────────────────────────
+function renderGameView(){
+  const g=S.games.find(x=>x.id===S.selectedId);
+  if(!g)return renderList();
+  const playerStr=g.minPlayers?(g.maxPlayers&&g.maxPlayers!==g.minPlayers?`${g.minPlayers} à ${g.maxPlayers} Joueurs`:`${g.minPlayers} Joueur${g.minPlayers>1?'s':''}`):'';
+  return`<div class="page fade-in"><div class="page-inner">
+    <div class="nav-row">
+      <button class="btn btn-ghost" style="width:auto;padding:7px 14px;font-size:.7rem" onclick="set({view:'list'})">‹ Retour</button>
+      <button class="btn btn-gold" style="width:auto;padding:7px 14px;font-size:.7rem" onclick="set({view:'edit',selectedId:'${g.id}'})">✦ Modifier</button>
+    </div>
+    <div class="game-title-display">${esc(g.name)}</div>
+    ${playerStr?`<div class="game-players-display">⚔ ${esc(playerStr)} ⚔</div>`:''}
+    <div class="ornament">— ✦ —</div>
+    ${g.rules?`<div class="sec-head"><span class="sec-head-symbol">📖</span>Règles du Jeu</div><div class="content-block-plain">${esc(g.rules)}</div>`:''}
+    ${g.notes?`<div class="hr-ornament">✦</div><div class="sec-head"><span class="sec-head-symbol">🌙</span>Variantes & Notes</div><div class="content-block">${esc(g.notes)}</div>`:''}
+    ${!g.rules&&!g.notes?`<div class="empty-field" style="text-align:center;padding:20px 0">Ce parchemin est encore vide...</div>`:''}
+    <div class="hr-ornament">✦</div>
+    <button class="btn btn-danger btn-full" onclick="confirmDelete('${g.id}')">✕ Effacer cette fiche</button>
+  </div></div>`;
+}
+
+// ── Form ──────────────────────────────────────────────────
+function renderForm(isNew){
+  const g=isNew?null:S.games.find(x=>x.id===S.selectedId);
+  return`<div class="page fade-in"><div class="page-inner">
+    <div class="nav-row">
+      <button class="btn btn-ghost" style="width:auto;padding:7px 14px;font-size:.7rem" onclick="cancelForm()">‹ Annuler</button>
+      <div style="font-family:'Cinzel',serif;font-size:.72rem;color:var(--worn);letter-spacing:1.5px;text-transform:uppercase">${isNew?'Nouvelle Fiche':'Modifier'}</div>
+    </div>
+    <div class="sec-head"><span class="sec-head-symbol">⚔</span>Identification</div>
+    <div class="field">
+      <label>Nom du Jeu *</label>
+      <input type="text" id="f-name" placeholder="Ex : Skull, Werewolf…" value="${esc(g?.name||'')}">
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Joueurs min.</label><input type="number" id="f-min" placeholder="2" min="1" max="99" value="${esc(g?.minPlayers||'')}"></div>
+      <div class="field"><label>Joueurs max.</label><input type="number" id="f-max" placeholder="6" min="1" max="99" value="${esc(g?.maxPlayers||'')}"></div>
+    </div>
+    <div class="sec-head" style="margin-top:18px"><span class="sec-head-symbol">📖</span>Règles du Jeu</div>
+    <div class="field"><textarea id="f-rules" placeholder="Mise en place, tour de jeu, condition de victoire…">${esc(g?.rules||'')}</textarea></div>
+    <div class="sec-head"><span class="sec-head-symbol">🌙</span>Variantes & Autres Notes</div>
+    <div class="field"><textarea id="f-notes" placeholder="Variantes maison, astuces, matériel…">${esc(g?.notes||'')}</textarea></div>
+    <div class="action-row">
+      <button class="btn btn-ghost" onclick="cancelForm()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveForm(${isNew})">✦ ${isNew?'Inscrire au Grimoire':'Sauvegarder'}</button>
+    </div>
+  </div></div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════════
+function openGame(id){set({view:'view',selectedId:id})}
+
+function cancelForm(){
+  set({view:S.selectedId?'view':'list'});
+}
+
+function saveForm(isNew){
+  // Read directly from DOM — most reliable on mobile
+  const name=(document.getElementById('f-name')?.value||'').trim();
+  if(!name){
+    const inp=document.getElementById('f-name');
+    if(inp){inp.style.borderColor='var(--blood)';inp.focus()}
+    showToast('⚠ Veuillez entrer un nom de jeu');
+    return;
+  }
+  const minPlayers=document.getElementById('f-min')?.value||'';
+  const maxPlayers=document.getElementById('f-max')?.value||'';
+  const rules=document.getElementById('f-rules')?.value||'';
+  const notes=document.getElementById('f-notes')?.value||'';
+
+  if(isNew){
+    const newGame={id:uid(),name,minPlayers,maxPlayers,rules,notes,createdAt:Date.now()};
+    const games=[...S.games,newGame];
+    saveGames(games);
+    S.games=games;
+    S.selectedId=newGame.id;
+    S.view='view';
+    render();
+    showToast('✦ Jeu inscrit au Grimoire');
+  } else {
+    const games=S.games.map(g=>g.id===S.selectedId?{...g,name,minPlayers,maxPlayers,rules,notes}:g);
+    saveGames(games);
+    S.games=games;
+    S.view='view';
+    render();
+    showToast('✦ Fiche mise à jour');
+  }
+}
+
+function confirmDelete(id){
+  const g=S.games.find(x=>x.id===id);if(!g)return;
+  const ov=document.getElementById('confirm-overlay');
+  ov.style.display='flex';
+  ov.innerHTML=`<div class="confirm-box">
+    <div class="confirm-title">⚔ Brûler cette fiche ?</div>
+    <div class="confirm-text">Effacer <strong>${esc(g.name)}</strong> du Grimoire ?<br>Cette action est irréversible.</div>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeConfirm()">Annuler</button>
+      <button class="btn btn-danger" style="flex:1;font-size:.75rem" onclick="deleteGame('${g.id}')">✕ Effacer</button>
+    </div>
+  </div>`;
+}
+function closeConfirm(){document.getElementById('confirm-overlay').style.display='none'}
+function deleteGame(id){
+  const games=S.games.filter(g=>g.id!==id);
+  saveGames(games);closeConfirm();
+  set({games,view:'list',selectedId:null});
+  showToast('Fiche effacée du Grimoire');
+}
+
+// ═══════════════════════════════════════════════════════════
+// PWA
+// ═══════════════════════════════════════════════════════════
+(function(){
+  function makeIcon(sz){
+    const c=document.createElement('canvas');c.width=sz;c.height=sz;
+    const ctx=c.getContext('2d');
+    ctx.fillStyle='#1A0A04';ctx.fillRect(0,0,sz,sz);
+    ctx.strokeStyle='#9B7A2E';ctx.lineWidth=sz*.06;
+    ctx.strokeRect(sz*.08,sz*.08,sz*.84,sz*.84);
+    ctx.fillStyle='#C9A84C';ctx.font=`${sz*.55}px Georgia,serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('📖',sz/2,sz/2);
+    return c.toDataURL('image/png');
+  }
+  const i192=makeIcon(192),i512=makeIcon(512);
+  const manifest={name:'Le Grimoire des Jeux',short_name:'Grimoire',description:'Votre registre de jeux',start_url:'./index.html',display:'standalone',background_color:'#1A0A04',theme_color:'#1A0A04',orientation:'portrait-primary',icons:[{src:i192,sizes:'192x192',type:'image/png',purpose:'any maskable'},{src:i512,sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+  const link=document.createElement('link');link.rel='manifest';
+  link.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
+  document.head.appendChild(link);
+  const il=document.createElement('link');il.rel='apple-touch-icon';il.href=i192;document.head.appendChild(il);
+  if('serviceWorker' in navigator){
+    const sw=`const C='grimoire-v2';self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>e.waitUntil(clients.claim()));self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{if(res.ok){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl))}return res}).catch(()=>caches.match('./index.html'))))})`;
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}).catch(()=>{});
+  }
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();S.installPrompt=e;set({showInstall:true})});
+  window.addEventListener('appinstalled',()=>set({showInstall:false}));
+})();
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+S.games=loadGames();
+render();
+</script>
+</body>
+</html>
